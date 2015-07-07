@@ -28,7 +28,6 @@ class QuickFileActionsView
     @input = document.createElement('atom-text-editor')
     @input.setAttribute('mini', true)
     @input.getModel().setText(path)
-    @input.onblur = @disposeAction
 
     @element.appendChild(label)
     @element.appendChild(@input)
