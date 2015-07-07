@@ -1,0 +1,24 @@
+{
+  "name": "quick-file-actions",
+  "main": "./lib/quick-file-actions",
+  "version": "0.0.1",
+  "description": "Quick move, copy, and delete file actions.",
+  "keywords": [
+  ],
+  "activationCommands": {
+    "atom-workspace": [
+      "quick-file-actions:move",
+      "quick-file-actions:copy",
+      "quick-file-actions:delete"
+    ]
+  },
+  "repository": "https://github.com/filipesabella/quick-file-actions",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "fs-plus": "*",
+    "fs-extra": "*"
+  }
+}
