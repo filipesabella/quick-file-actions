@@ -63,7 +63,7 @@ module.exports = QuickFileActions =
         doCopy()
     )
 
-    showModalWith = (callback, text) =>
+    showModalWith = (callback, textFn) =>
       =>
         path = atom.workspace.getActivePaneItem()?.getPath?()
 
@@ -71,17 +71,20 @@ module.exports = QuickFileActions =
           return
 
         @modalPanel = atom.workspace.addModalPanel(
-          item: @quickFileActionsView.getElement(text, path, callback),
+          item: @quickFileActionsView.getElement(textFn(path), path, callback),
           visible: true
         )
         @quickFileActionsView.focus()
 
-    addSubscription = (action, fn, text) =>
-      @subscriptions.add(atom.commands.add('atom-workspace', 'quick-file-actions:' + action, showModalWith(fn, text)))
+    addSubscription = (action, callback, textFn) =>
+      @subscriptions.add(atom.commands.add(
+        'atom-workspace',
+        'quick-file-actions:' + action,
+        showModalWith(callback, textFn)))
 
-    addSubscription('move', move, 'Move file to')
-    addSubscription('copy', copy, 'Copy file to')
-    addSubscription('delete', remove, 'Path to delete')
+    addSubscription('move', move, (path) -> "Move #{path} to")
+    addSubscription('copy', copy, (path) -> "Copy #{path} to")
+    addSubscription('delete', remove, (_) -> 'Path to delete')
 
   deactivate: ->
     @modalPanel?.destroy()
