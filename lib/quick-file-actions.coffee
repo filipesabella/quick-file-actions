@@ -8,6 +8,14 @@ module.exports = QuickFileActions =
   modalPanel: null
   subscriptions: null
 
+  config:
+    confirmOnDelete:
+      type: 'boolean'
+      default: true
+    confirmOnReplace:
+      type: 'boolean'
+      default: true
+
   activate: (state) ->
     @subscriptions = new CompositeDisposable
 
@@ -23,13 +31,18 @@ module.exports = QuickFileActions =
         disposeAction()
 
     move = withDispose((oldPath, newPath) -> fs_plus.moveSync(oldPath, newPath))
-    
+
     remove = withDispose((oldPath, newPath) ->
-      atom.confirm
-        message: 'Please confirm deleting ' + newPath
-        buttons:
-          Yes: -> fs_plus.removeSync(newPath)
-          Cancel: ->
+      doRemove = -> fs_plus.removeSync(newPath)
+
+      if (atom.config.get('quick-file-actions.confirmOnDelete') == true)
+        atom.confirm
+          message: 'Please confirm deleting ' + newPath
+          buttons:
+            Yes: doRemove
+            Cancel: ->
+      else
+        doRemove()
     )
 
     copy = withDispose((oldPath, newPath) ->
@@ -40,7 +53,7 @@ module.exports = QuickFileActions =
         fs_extra.copySync(oldPath, newPath)
         atom.workspace.open(newPath)
 
-      if (fs_plus.existsSync(newPath))
+      if (fs_plus.existsSync(newPath) && atom.config.get('quick-file-actions.confirmOnReplace') == true)
         atom.confirm
           message: 'Destination file already exists, override?'
           buttons:
