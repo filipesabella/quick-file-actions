@@ -1,10 +1,9 @@
 {
   "name": "quick-file-actions",
   "main": "./lib/quick-file-actions",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Quick move, copy, and delete file actions.",
-  "keywords": [
-  ],
+  "keywords": [],
   "activationCommands": {
     "atom-workspace": [
       "quick-file-actions:move",
