@@ -81,7 +81,7 @@ module.exports = QuickFileActions =
 
     addSubscription('move', move, 'Move file to')
     addSubscription('copy', copy, 'Copy file to')
-    addSubscription('remove', remove, 'Path to delete')
+    addSubscription('delete', remove, 'Path to delete')
 
   deactivate: ->
     @modalPanel?.destroy()

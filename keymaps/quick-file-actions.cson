@@ -8,6 +8,6 @@
 # For more detailed documentation see
 # https://atom.io/docs/latest/behind-atom-keymaps-in-depth
 'atom-workspace':
-  'ctrl-alt-m': 'quick-file-actions:move'
-  'ctrl-alt-d': 'quick-file-actions:remove'
   'ctrl-alt-c': 'quick-file-actions:copy'
+  'ctrl-alt-m': 'quick-file-actions:move'
+  'ctrl-alt-d': 'quick-file-actions:delete'
