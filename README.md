@@ -2,9 +2,10 @@
 
 Quick move, copy, and delete file actions.
 
-* ctrl-alt-m: move
-* ctrl-alt-d: delete
 * ctrl-alt-c: copy
+* ctrl-alt-d: delete
+* ctrl-alt-m: move
+* ctrl-alt-n: new
 
 Or through the command palette.
 

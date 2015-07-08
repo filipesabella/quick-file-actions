@@ -2,3 +2,4 @@
   'ctrl-alt-c': 'quick-file-actions:copy'
   'ctrl-alt-m': 'quick-file-actions:move'
   'ctrl-alt-d': 'quick-file-actions:delete'
+  'ctrl-alt-n': 'quick-file-actions:new'

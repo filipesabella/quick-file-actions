@@ -8,7 +8,8 @@
     "atom-workspace": [
       "quick-file-actions:move",
       "quick-file-actions:copy",
-      "quick-file-actions:delete"
+      "quick-file-actions:delete",
+      "quick-file-actions:new"
     ]
   },
   "repository": "https://github.com/filipesabella/quick-file-actions",
