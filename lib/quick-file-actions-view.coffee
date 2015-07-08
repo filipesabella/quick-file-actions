@@ -28,6 +28,8 @@ module.exports = class QuickFileActionsView
     @input.setAttribute('mini', true)
     @input.getModel().setText(path)
 
+    # setTimeout here as when not present it messes up the order of things and
+    # throws exceptions.
     @input.onblur = => window.setTimeout(@disposeAction, 1)
 
     @element.appendChild(label)
