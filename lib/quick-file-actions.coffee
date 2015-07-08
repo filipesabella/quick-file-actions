@@ -18,50 +18,16 @@ module.exports = QuickFileActions =
 
   activate: (state) ->
     @subscriptions = new CompositeDisposable
+    @quickFileActionsView = new QuickFileActionsView(disposeAction)
 
     disposeAction = =>
       @modalPanel?.destroy()
       atom.workspace.getActivePane().activate()
 
-    @quickFileActionsView = new QuickFileActionsView(disposeAction)
-
     withDispose = (fn) =>
       (oldPath, newPath) ->
         fn(oldPath, newPath)
         disposeAction()
-
-    move = withDispose((oldPath, newPath) -> fs_plus.moveSync(oldPath, newPath))
-
-    remove = withDispose((oldPath, newPath) ->
-      doRemove = -> fs_plus.removeSync(newPath)
-
-      if (atom.config.get('quick-file-actions.confirmOnDelete') == true)
-        atom.confirm
-          message: 'Please confirm deleting ' + newPath
-          buttons:
-            Yes: doRemove
-            Cancel: ->
-      else
-        doRemove()
-    )
-
-    copy = withDispose((oldPath, newPath) ->
-      if (oldPath == newPath)
-        return
-
-      doCopy = =>
-        fs_extra.copySync(oldPath, newPath)
-        atom.workspace.open(newPath)
-
-      if (fs_plus.existsSync(newPath) && atom.config.get('quick-file-actions.confirmOnReplace') == true)
-        atom.confirm
-          message: 'Destination file already exists, override?'
-          buttons:
-            Yes: -> doCopy()
-            Cancel: ->
-      else
-        doCopy()
-    )
 
     showModalWith = (callback, textFn) =>
       =>
@@ -82,9 +48,9 @@ module.exports = QuickFileActions =
         'quick-file-actions:' + action,
         showModalWith(callback, textFn)))
 
-    addSubscription('move', move, (path) -> "Move #{path} to")
-    addSubscription('copy', copy, (path) -> "Copy #{path} to")
-    addSubscription('delete', remove, (_) -> 'Path to delete')
+    addSubscription('move', withDispose(move), (path) -> "Move #{path} to")
+    addSubscription('copy', withDispose(copy), (path) -> "Copy #{path} to")
+    addSubscription('delete', withDispose(remove), (_) -> 'Path to delete')
 
   deactivate: ->
     @modalPanel?.destroy()
@@ -92,4 +58,35 @@ module.exports = QuickFileActions =
     @quickFileActionsView?.destroy()
 
   serialize: ->
-    quickFileActionsViewState: @quickFileActionsView.serialize()
+
+move = (oldPath, newPath) ->
+  fs_plus.moveSync(oldPath, newPath)
+
+remove = (oldPath, newPath) ->
+  doRemove = -> fs_plus.removeSync(newPath)
+
+  if (atom.config.get('quick-file-actions.confirmOnDelete') == true)
+    atom.confirm
+      message: 'Please confirm deleting ' + newPath
+      buttons:
+        Yes: doRemove
+        Cancel: ->
+  else
+    doRemove()
+
+copy = (oldPath, newPath) ->
+  if (oldPath == newPath)
+    return
+
+  doCopy = =>
+    fs_extra.copySync(oldPath, newPath)
+    atom.workspace.open(newPath)
+
+  if (fs_plus.existsSync(newPath) && atom.config.get('quick-file-actions.confirmOnReplace') == true)
+    atom.confirm
+      message: 'Destination file already exists, override?'
+      buttons:
+        Yes: -> doCopy()
+        Cancel: ->
+  else
+    doCopy()
