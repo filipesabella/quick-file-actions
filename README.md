@@ -1,6 +1,6 @@
 # quick-file-actions package
 
-Quick move, copy, and delete file actions.
+Quickly copy, delete, move, and create new files.
 
 * ctrl-alt-c: copy
 * ctrl-alt-d: delete
