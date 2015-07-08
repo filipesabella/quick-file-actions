@@ -1,5 +1,4 @@
-module.exports =
-class QuickFileActionsView
+module.exports = class QuickFileActionsView
   constructor: (disposeAction) ->
     @disposeAction = disposeAction
 
@@ -28,6 +27,8 @@ class QuickFileActionsView
     @input = document.createElement('atom-text-editor')
     @input.setAttribute('mini', true)
     @input.getModel().setText(path)
+
+    @input.onblur = => window.setTimeout(@disposeAction, 1)
 
     @element.appendChild(label)
     @element.appendChild(@input)
