@@ -9,5 +9,5 @@
 # https://atom.io/docs/latest/behind-atom-keymaps-in-depth
 'atom-workspace':
   'ctrl-alt-m': 'quick-file-actions:move'
-  'ctrl-alt-r': 'quick-file-actions:remove'
+  'ctrl-alt-d': 'quick-file-actions:remove'
   'ctrl-alt-c': 'quick-file-actions:copy'
