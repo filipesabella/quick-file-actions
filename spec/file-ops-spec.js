@@ -132,6 +132,7 @@ describe('a file ops object', function () {
         subject(absolutePath).copy(fileToCopy);
 
         expect(fsExtra.copySync).toHaveBeenCalledWith(absolutePath, pathToCopy);
+        expect(atom.workspace.open).toHaveBeenCalledWith(pathToCopy);
       });
     });
 
@@ -156,6 +157,7 @@ describe('a file ops object', function () {
           subject(absolutePath).copy(fileToCopy);
 
           expect(fsExtra.copySync).toHaveBeenCalledWith(absolutePath, pathToCopy);
+          expect(atom.workspace.open).toHaveBeenCalledWith(pathToCopy);
         });
       });
 
@@ -174,6 +176,7 @@ describe('a file ops object', function () {
           atom.confirm = function (opts) { opts.buttons['Yes'](); };
           subject(absolutePath).copy(fileToCopy);
           expect(fsExtra.copySync).toHaveBeenCalledWith(absolutePath, pathToCopy);
+          expect(atom.workspace.open).toHaveBeenCalledWith(pathToCopy);
         });
       });
     });
