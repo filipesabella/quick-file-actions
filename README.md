@@ -2,10 +2,10 @@
 
 Quickly copy, delete, move, and create new files.
 
-* ctrl-alt-c: copy
-* ctrl-alt-d: delete
-* ctrl-alt-m: move
-* ctrl-alt-n: new
+* ctrl-alt-f c: copy
+* ctrl-alt-f d: delete
+* ctrl-alt-f m: move
+* ctrl-alt-f n: new
 
 Or through the command palette.
 

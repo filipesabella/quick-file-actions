@@ -1,5 +1,5 @@
 'atom-workspace':
-  'ctrl-alt-c': 'quick-file-actions:copy'
-  'ctrl-alt-m': 'quick-file-actions:move'
-  'ctrl-alt-d': 'quick-file-actions:delete'
-  'ctrl-alt-n': 'quick-file-actions:new'
+  'ctrl-alt-f c': 'quick-file-actions:copy'
+  'ctrl-alt-f m': 'quick-file-actions:move'
+  'ctrl-alt-f d': 'quick-file-actions:delete'
+  'ctrl-alt-f n': 'quick-file-actions:new'
