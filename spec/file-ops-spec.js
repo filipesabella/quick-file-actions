@@ -8,6 +8,7 @@ describe('a file ops object', function () {
 
   var fsPlus = require('fs-plus');
   var fsExtra = require('fs-extra');
+  var shell = require('electron').shell;
 
   beforeEach(function () {
     spyOn(atom.project, 'relativizePath').andReturn([absolutePath, relativePath]);
@@ -16,6 +17,7 @@ describe('a file ops object', function () {
     spyOn(fsPlus, 'removeSync');
     spyOn(fsExtra, 'move');
     spyOn(fsExtra, 'copySync');
+    spyOn(shell, 'moveItemToTrash');
   });
 
   afterEach(function () {
@@ -41,30 +43,67 @@ describe('a file ops object', function () {
   describe('when removing files', function () {
     var fileToRemove = 'lib/file-to-remove';
 
-    it('does not confirm if not configured', function () {
-      subject(absolutePath).remove(fileToRemove);
+    describe('when it is configured to delete files permanently', function () {
+      beforeEach(function () {
+        atom.config.set('quick-file-actions.moveToTrash', false);
+      });
 
-      var pathToRemove = projectRoot + fileToRemove;
-      expect(fsPlus.removeSync).toHaveBeenCalledWith(pathToRemove);
+      it('does not confirm if not configured', function () {
+        subject(absolutePath).remove(fileToRemove);
+
+        var pathToRemove = projectRoot + fileToRemove;
+        expect(fsPlus.removeSync).toHaveBeenCalledWith(pathToRemove);
+      });
+
+      describe('when configured to confirm', function () {
+        beforeEach(function () {
+          atom.config.set('quick-file-actions.confirmOnDelete', true)
+        });
+
+        it('does not delete when not confirming', function () {
+          atom.confirm = util.identity;
+          subject(absolutePath).remove(fileToRemove);
+          expect(fsPlus.removeSync).not.toHaveBeenCalled();
+        });
+
+        it('deletes when confirming', function () {
+          atom.confirm = function (opts) { opts.buttons['Yes'](); };
+          subject(absolutePath).remove(fileToRemove);
+          expect(fsPlus.removeSync).toHaveBeenCalledWith(projectRoot + fileToRemove);
+        });
+      })
     });
 
-    describe('when configured to confirm', function () {
+    describe('when it is configured to move files to the trash bin', function () {
       beforeEach(function () {
-        atom.config.set('quick-file-actions.confirmOnDelete', true)
+        atom.config.set('quick-file-actions.moveToTrash', true);
       });
 
-      it('does not delete when not confirming', function () {
-        atom.confirm = util.identity;
+      it('does not confirm if not configured', function () {
         subject(absolutePath).remove(fileToRemove);
-        expect(fsPlus.removeSync).not.toHaveBeenCalled();
+
+        var pathToRemove = projectRoot + fileToRemove;
+        expect(shell.moveItemToTrash).toHaveBeenCalledWith(pathToRemove);
       });
 
-      it('deletes when confirming', function () {
-        atom.confirm = function (opts) { opts.buttons['Yes'](); };
-        subject(absolutePath).remove(fileToRemove);
-        expect(fsPlus.removeSync).toHaveBeenCalledWith(projectRoot + fileToRemove);
-      });
-    })
+      describe('when configured to confirm', function () {
+        beforeEach(function () {
+          atom.config.set('quick-file-actions.confirmOnDelete', true);
+        });
+
+        it('does not delete when not confirming', function () {
+          atom.confirm = util.identity;
+          subject(absolutePath).remove(fileToRemove);
+          expect(shell.moveItemToTrash).not.toHaveBeenCalled();
+        });
+
+        it('deletes when confirming', function () {
+          atom.confirm = function (opts) { opts.buttons['Yes'](); };
+          subject(absolutePath).remove(fileToRemove);
+          expect(shell.moveItemToTrash).toHaveBeenCalledWith(projectRoot + fileToRemove);
+        });
+      })
+    });
   });
 
   describe('when moving files', function () {
