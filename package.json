@@ -1,7 +1,7 @@
 {
   "name": "quick-file-actions",
   "main": "./lib/quick-file-actions",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Quickly copy, delete, move, and create new files.",
   "keywords": [],
   "activationCommands": {
